@@ -8,7 +8,6 @@ package za.ac.cput.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.Hospital;
-import za.ac.cput.factory.HospitalFactory;
 import za.ac.cput.repository.IHospitalRepository;
 
 import java.util.List;
@@ -20,8 +19,8 @@ public class HospitalService implements IHospitalService{
     private static IHospitalRepository repository = null;
 
     @Autowired
-    private HospitalService(IHospitalRepository HospitalRepository){
-        this.repository = HospitalRepository;
+    private HospitalService(IHospitalRepository hospitalRepository){
+        this.repository = hospitalRepository;
     }
 
     @Override

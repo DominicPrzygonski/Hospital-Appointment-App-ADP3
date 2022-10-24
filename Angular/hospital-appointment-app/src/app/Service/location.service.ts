@@ -26,15 +26,15 @@ export class LocationService {
   }
 
   public addLocation(location: Location): Observable<Location> {
-    return this.http.post<Location>(`${this.apiServerUrl}/location/save`, location)
+    return this.http.post<Location>(`${this.apiServerUrl}/location/save`, location, httpOptions)
   }
 
   public updateLocation(location: Location): Observable<Location> {
-    return this.http.post<Location>(`${this.apiServerUrl}/location/save`, location)
+    return this.http.post<Location>(`${this.apiServerUrl}/location/save`, location, httpOptions)
   }
 
   public deleteLocation(locationId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiServerUrl}/location/delete/${locationId}`)
+    return this.http.delete<void>(`${this.apiServerUrl}/location/delete/${locationId}`, httpOptions)
   }
 
 }
