@@ -8,17 +8,15 @@ import { Patient } from '../Domain/patient';
 import { AppointmentService } from '../Service/appointment.service';
 import { EmployeeService } from '../Service/employee.service';
 import { PatientService } from '../Service/patient.service';
-import { HospitalService } from '../Service/hospital.service';
 import { Hospital } from '../Domain/hospital';
-import { LocationService } from '../Service/location.service';
+import { HospitalService } from '../Service/hospital.service';
 import { Location } from '../Domain/location';
+import { LocationService } from '../Service/location.service';
 import { PrescriptionService } from '../Service/prescription.service';
 import { Prescription } from '../Domain/prescription';
 import { Procedure } from '../Domain/procedure';
 import { ProcedureService } from '../Service/procedure.service';
 import {v4 as uuids4} from 'uuid';
-import { Medicine } from '../Domain/medicine';
-import { MedicineService } from '../Service/medicine.service';
 
 @Component({ templateUrl: 'employeeMenu.component.html' })
 export class EmployeeMenuComponent implements OnInit{
@@ -93,6 +91,14 @@ export class EmployeeMenuComponent implements OnInit{
             (error: HttpErrorResponse) => {
                 alert(error.message);
             })
+        this.procedureService.getProcedures().subscribe(
+            (response: Procedure[]) => {
+                this.procedures = response;
+            },
+            (error: HttpErrorResponse) => {
+                alert(error.message);
+            })
+
     }
 
     //Generating Id
@@ -272,13 +278,13 @@ export class EmployeeMenuComponent implements OnInit{
     public displayPatients(): void{
         this.hideAll();
         this.showPatients = true;
-    }
+    }  
     
     //Hospital//////////////////////////////////////////////////
     public displayHospital(): void{
         this.hideAll();
         this.showHospital = true;
-    }
+    }   
 
     public onAddHospital(addHospitalForm: NgForm): void{
         document.getElementById('add-hospital-form')?.click();
@@ -288,12 +294,12 @@ export class EmployeeMenuComponent implements OnInit{
                 //Reloading Hospital cards
                 this.hospitalService.getHospitals().subscribe(
                     (response: Hospital[]) => {
-                        this.hospitals = [];
+                      this.hospitals = [];
                         for (let i = 0; i < response.length; i++) {
-                          this.hospitals.push(response[i]) 
+                            this.hospitals.push(response[i]) 
                             addHospitalForm.reset();
-                      }
-                      },
+                        }
+                    },
                     (error: HttpErrorResponse) => {
                       alert(error.message);
                       addHospitalForm.reset();
@@ -317,10 +323,10 @@ export class EmployeeMenuComponent implements OnInit{
                           this.hospitals.push(response[i]) 
                       }
                       },
-                      (error: HttpErrorResponse) => {
-                        alert(error.message);
-                      })
-              },
+                    (error: HttpErrorResponse) => {
+                      alert(error.message);
+                    })
+            },
             (error: HttpErrorResponse) => {
                 alert(error.message)
             }
@@ -332,19 +338,19 @@ export class EmployeeMenuComponent implements OnInit{
         
         this.hospitalService.deleteHospital(hospitalId!).subscribe(
             (response: void) => {
-                
+
                 //Reloading Hospital cards
                 this.hospitalService.getHospitals().subscribe(
                     (response: Hospital[]) => {
                         this.hospitals = [];
-                      for (let i = 0; i < response.length; i++) {
+                        for (let i = 0; i < response.length; i++) {
                           this.hospitals.push(response[i]) 
-                    }
-                    },
-                    (error: HttpErrorResponse) => {
-                      alert(error.message);
-                    })
-            },
+                      }
+                      },
+                      (error: HttpErrorResponse) => {
+                        alert(error.message);
+                      })
+              },
             (error: HttpErrorResponse) => {
                 alert(error.message)
             }
@@ -373,12 +379,12 @@ export class EmployeeMenuComponent implements OnInit{
         }
         container?.appendChild(button);
         button.click();
-    }
+    }   
     //Location//////////////////////////////////////////////////
     public displayLocation(): void{
         this.hideAll();
         this.showLocation = true;
-    }
+    }   
 
     public onAddLocation(addLocationForm: NgForm): void{
         document.getElementById('add-location-form')?.click();
@@ -388,12 +394,12 @@ export class EmployeeMenuComponent implements OnInit{
                 //Reloading Location cards
                 this.locationService.getLocations().subscribe(
                     (response: Location[]) => {
-                        this.locations = [];
+                      this.locations = [];
                         for (let i = 0; i < response.length; i++) {
-                          this.locations.push(response[i]) 
+                            this.locations.push(response[i]) 
                             addLocationForm.reset();
-                      }
-                      },
+                        }
+                    },
                     (error: HttpErrorResponse) => {
                       alert(error.message);
                       addLocationForm.reset();
@@ -412,11 +418,11 @@ export class EmployeeMenuComponent implements OnInit{
                 //Reloading Location cards
                 this.locationService.getLocations().subscribe(
                     (response: Location[]) => {
-                      this.locations = [];
-                      for (let i = 0; i < response.length; i++) {
-                        this.locations.push(response[i]) 
-                    }
-                    },
+                        this.locations = [];
+                        for (let i = 0; i < response.length; i++) {
+                          this.locations.push(response[i]) 
+                      }
+                      },
                     (error: HttpErrorResponse) => {
                       alert(error.message);
                     })
@@ -432,11 +438,14 @@ export class EmployeeMenuComponent implements OnInit{
         
         this.locationService.deleteLocation(locationId!).subscribe(
             (response: void) => {
-                
+
                 //Reloading Location cards
                 this.locationService.getLocations().subscribe(
                     (response: Location[]) => {
                       this.locations = [];
+                      for (let i = 0; i < response.length; i++) {
+                        this.locations.push(response[i]) 
+                    }
                     },
                     (error: HttpErrorResponse) => {
                       alert(error.message);
@@ -470,5 +479,5 @@ export class EmployeeMenuComponent implements OnInit{
         }
         container?.appendChild(button);
         button.click();
-    }
+    }   
 }
