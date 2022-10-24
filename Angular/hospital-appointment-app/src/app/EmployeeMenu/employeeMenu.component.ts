@@ -17,28 +17,26 @@ import { Prescription } from '../Domain/prescription';
 import { Procedure } from '../Domain/procedure';
 import { ProcedureService } from '../Service/procedure.service';
 import {v4 as uuids4} from 'uuid';
-import { Medicine } from '../Domain/medicine';
-import { MedicineService } from '../Service/medicine.service';
 
 @Component({ templateUrl: 'employeeMenu.component.html' })
 export class EmployeeMenuComponent implements OnInit{
 
-    constructor(private procedureService: ProcedureService,private prescriptionService: PrescriptionService,private hospitalService: HospitalService,private appointmentService: AppointmentService, private employeeService: EmployeeService, private patientService: PatientService, private medicineService: MedicineService) { }
+    constructor(private procedureService: ProcedureService,private prescriptionService: PrescriptionService,private hospitalService: HospitalService,private locationService: LocationService,private appointmentService: AppointmentService, private employeeService: EmployeeService, private patientService: PatientService) { }
 
     public appointments: Appointment[] = [];
     public employees: Employee[] = [];
     public patients: Patient[] = [];
     public hospitals: Hospital[] = [];
+    public locations: Location[] = [];
     public prescriptions: Prescription[] = [];
     public procedures: Procedure[] = [];
-    public medicines: Medicine[] = [];
     public generatedId: String | undefined;
     public editAppointment: Appointment | undefined;
     public deleteAppointment: Appointment | undefined;
-    public editProcedure: Procedure | undefined;
-    public deleteProcedure: Procedure | undefined;
-    public editMedicine: Medicine | undefined;
-    public deleteMedicine: Medicine | undefined;
+    public editHospital: Hospital | undefined;
+    public deleteHospital: Hospital | undefined;
+    public editLocation: Location | undefined;
+    public deleteLocation: Location | undefined;
 
     ngOnInit(): void {
         //Fetching data to call from later
@@ -77,6 +75,15 @@ export class EmployeeMenuComponent implements OnInit{
             (error: HttpErrorResponse) => {
                 alert(error.message);
             })
+            
+        this.locationService.getLocations().subscribe(
+            (response: Location[]) => {
+                this.locations = response;
+            },
+            (error: HttpErrorResponse) => {
+                alert(error.message);
+            })
+
         this.prescriptionService.getPrescriptions().subscribe(
             (response: Prescription[]) => {
                 this.prescriptions = response;
@@ -87,14 +94,6 @@ export class EmployeeMenuComponent implements OnInit{
         this.procedureService.getProcedures().subscribe(
             (response: Procedure[]) => {
                 this.procedures = response;
-            },
-            (error: HttpErrorResponse) => {
-                alert(error.message);
-            })
-
-        this.medicineService.getMedicine().subscribe(
-            (response: Medicine[]) => {
-                this.medicines = response;
             },
             (error: HttpErrorResponse) => {
                 alert(error.message);
@@ -113,16 +112,16 @@ export class EmployeeMenuComponent implements OnInit{
     public showAppointment = false;
     public showPatients = false;
     public showEmployees = false;
-    public showMedicines = false;
-    public showProcedures = false;
+    public showHospital = false;
+    public showLocation = false;
 
     //Hide All
     public hideAll(): void{
         this.showAppointment = false;
         this.showPatients = false;
         this.showEmployees = false;
-        this.showMedicines = false;
-        this.showProcedures = false;
+        this.showHospital = false;
+        this.showLocation = false;
     }  
 
     //Appointment//////////////////////////////////////////////////
@@ -279,20 +278,42 @@ export class EmployeeMenuComponent implements OnInit{
     public displayPatients(): void{
         this.hideAll();
         this.showPatients = true;
-    }
+    }  
     
-
-
-    //Procedure/////////////////////////////////////////////////////
-    public displayProcedures(): void{
+    //Hospital//////////////////////////////////////////////////
+    public displayHospital(): void{
         this.hideAll();
-        this.showProcedures = true;
+        this.showHospital = true;
+    }   
+
+    public onAddHospital(addHospitalForm: NgForm): void{
+        document.getElementById('add-hospital-form')?.click();
+        this.hospitalService.addHospital(addHospitalForm.value).subscribe(
+            (response: Hospital) => {
+
+                //Reloading Hospital cards
+                this.hospitalService.getHospitals().subscribe(
+                    (response: Hospital[]) => {
+                      this.hospitals = [];
+                        for (let i = 0; i < response.length; i++) {
+                            this.hospitals.push(response[i]) 
+                            addHospitalForm.reset();
+                        }
+                    },
+                    (error: HttpErrorResponse) => {
+                      alert(error.message);
+                      addHospitalForm.reset();
+                    })
+            },
+            (error: HttpErrorResponse) => {
+                alert(error.message)
+            }
+        );
     }
 
-    public onAddProcedure(addProcedureForm: NgForm): void{
-        document.getElementById('add-procedure-form')?.click();
-        this.procedureService.addProcedure(addProcedureForm.value).subscribe(
-            (response: Procedure) => {
+    public onEditHospital(hospital: Hospital): void{
+        this.hospitalService.updateHospital(hospital).subscribe(
+            (response: Hospital) => {
 
                 //Reloading Hospital cards
                 this.hospitalService.getHospitals().subscribe(
@@ -304,7 +325,6 @@ export class EmployeeMenuComponent implements OnInit{
                       },
                     (error: HttpErrorResponse) => {
                       alert(error.message);
-                      addProcedureForm.reset();
                     })
             },
             (error: HttpErrorResponse) => {
@@ -314,10 +334,10 @@ export class EmployeeMenuComponent implements OnInit{
     }
 
 
-    public onEditProcedure(procedure: Procedure): void{
+    public onDeleteHospital(hospitalId?: string): void{
         
-        this.procedureService.updateProcedure(procedure).subscribe(
-            (response: Procedure) => {
+        this.hospitalService.deleteHospital(hospitalId!).subscribe(
+            (response: void) => {
 
                 //Reloading Hospital cards
                 this.hospitalService.getHospitals().subscribe(
@@ -337,65 +357,63 @@ export class EmployeeMenuComponent implements OnInit{
         );
     }
 
-    public onDeleteProcedure(procedureID?: string): void{
-
-        this.procedureService.deleteProcedure(procedureID).subscribe(
-            (response: void) => {
-                
-                //Reloading Procedure cards
-                this.procedureService.getProcedures().subscribe(
-                    (response: Procedure[]) => {
-                      this.procedures = [];
-                      for (let i = 0; i < response.length; i++) {
-                        this.procedures.push(response[i]) 
-                    }
-                    },
-                    (error: HttpErrorResponse) => {
-                      alert(error.message);
-                    })
-            },
-            (error: HttpErrorResponse) => {
-                alert(error.message)
-            }
-
-        );
-
-    }
-
-    public onOpenModalProcedure( mode: string, procedure?: Procedure): void {
-        const container = document.getElementById('procedure-Container');
+    
+    public onOpenModalHospital( mode: string, hospital?: Hospital): void {
+        const container = document.getElementById('hospital-Container');
         const button = document.createElement('button');
         button.type = 'button';
         button.style.display = 'none';
         button.setAttribute('data-toggle', 'modal');
         if (mode === 'add') {
-        button.setAttribute('data-target', '#addProcedureModal');
+        button.setAttribute('data-target', '#addHospitalModal');
         this.generateId();
         }
         if (mode === 'edit') {
-        this.editProcedure = procedure;
-        console.log(this.editProcedure);
-        button.setAttribute('data-target', '#updateProcedureModal');
+        this.editHospital = hospital;
+        console.log(this.editHospital);
+        button.setAttribute('data-target', '#updateHospitalModal');
         }
         if (mode === 'delete') {
-        this.deleteProcedure = procedure;
-        button.setAttribute('data-target', '#deleteProcedureModal');
+        this.deleteHospital = hospital;
+        button.setAttribute('data-target', '#deleteHospitalModal');
         }
         container?.appendChild(button);
         button.click();
-    }
-
-
-    //Medicine/////////////////////////////////////////////////////
-    public displayMedicines(): void{
+    }   
+    //Location//////////////////////////////////////////////////
+    public displayLocation(): void{
         this.hideAll();
-        this.showMedicines = true;
+        this.showLocation = true;
+    }   
+
+    public onAddLocation(addLocationForm: NgForm): void{
+        document.getElementById('add-location-form')?.click();
+        this.locationService.addLocation(addLocationForm.value).subscribe(
+            (response: Location) => {
+
+                //Reloading Location cards
+                this.locationService.getLocations().subscribe(
+                    (response: Location[]) => {
+                      this.locations = [];
+                        for (let i = 0; i < response.length; i++) {
+                            this.locations.push(response[i]) 
+                            addLocationForm.reset();
+                        }
+                    },
+                    (error: HttpErrorResponse) => {
+                      alert(error.message);
+                      addLocationForm.reset();
+                    })
+            },
+            (error: HttpErrorResponse) => {
+                alert(error.message)
+            }
+        );
     }
 
-    public onAddMedicine(addMedicineForm: NgForm): void{
-        document.getElementById('add-medicine-form')?.click();
-        this.medicineService.addMedicine(addMedicineForm.value).subscribe(
-            (response: Medicine) => {
+    public onEditLocation(location: Location): void{
+        this.locationService.updateLocation(location).subscribe(
+            (response: Location) => {
 
                 //Reloading Location cards
                 this.locationService.getLocations().subscribe(
@@ -407,7 +425,6 @@ export class EmployeeMenuComponent implements OnInit{
                       },
                     (error: HttpErrorResponse) => {
                       alert(error.message);
-                      addMedicineForm.reset();
                     })
             },
             (error: HttpErrorResponse) => {
@@ -417,10 +434,10 @@ export class EmployeeMenuComponent implements OnInit{
     }
 
 
-    public onEditMedicine(medicine: Medicine): void{
+    public onDeleteLocation(locationId?: string): void{
         
-        this.medicineService.updateMedicine(medicine).subscribe(
-            (response: Medicine) => {
+        this.locationService.deleteLocation(locationId!).subscribe(
+            (response: void) => {
 
                 //Reloading Location cards
                 this.locationService.getLocations().subscribe(
@@ -440,51 +457,27 @@ export class EmployeeMenuComponent implements OnInit{
         );
     }
 
-    public onDeleteMedicine(medicineID?: string): void{
-
-        this.medicineService.deleteMedicine(medicineID).subscribe(
-            (response: void) => {
-                
-                //Reloading Medicine cards
-                this.medicineService.getMedicine().subscribe(
-                    (response: Medicine[]) => {
-                      this.medicines = [];
-                      for (let i = 0; i < response.length; i++) {
-                        this.medicines.push(response[i]) 
-                    }
-                    },
-                    (error: HttpErrorResponse) => {
-                      alert(error.message);
-                    })
-            },
-            (error: HttpErrorResponse) => {
-                alert(error.message)
-            }
-
-        );
-
-    }
-
-    public onOpenModalMedicine( mode: string, medicine?: Medicine): void {
-        const container = document.getElementById('medicine-Container');
+    
+    public onOpenModalLocation( mode: string, location?: Location): void {
+        const container = document.getElementById('location-Container');
         const button = document.createElement('button');
         button.type = 'button';
         button.style.display = 'none';
         button.setAttribute('data-toggle', 'modal');
         if (mode === 'add') {
-        button.setAttribute('data-target', '#addMedicineModal');
+        button.setAttribute('data-target', '#addLocationModal');
         this.generateId();
         }
         if (mode === 'edit') {
-        this.editMedicine = medicine;
-        console.log(this.editMedicine);
-        button.setAttribute('data-target', '#updateMedicineModal');
+        this.editLocation = location;
+        console.log(this.editLocation);
+        button.setAttribute('data-target', '#updateLocationModal');
         }
         if (mode === 'delete') {
-        this.deleteMedicine = medicine;
-        button.setAttribute('data-target', '#deleteMedicineModal');
+        this.deleteLocation = location;
+        button.setAttribute('data-target', '#deleteLocationModal');
         }
         container?.appendChild(button);
         button.click();
-    }
+    }   
 }
