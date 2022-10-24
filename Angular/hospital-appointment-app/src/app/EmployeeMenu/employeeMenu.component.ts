@@ -8,10 +8,10 @@ import { Patient } from '../Domain/patient';
 import { AppointmentService } from '../Service/appointment.service';
 import { EmployeeService } from '../Service/employee.service';
 import { PatientService } from '../Service/patient.service';
-import { Hospital } from '../Domain/hospital';
 import { HospitalService } from '../Service/hospital.service';
-import { Location } from '../Domain/location';
+import { Hospital } from '../Domain/hospital';
 import { LocationService } from '../Service/location.service';
+import { Location } from '../Domain/location';
 import { PrescriptionService } from '../Service/prescription.service';
 import { Prescription } from '../Domain/prescription';
 import { Procedure } from '../Domain/procedure';
@@ -437,9 +437,6 @@ export class EmployeeMenuComponent implements OnInit{
                 this.locationService.getLocations().subscribe(
                     (response: Location[]) => {
                       this.locations = [];
-                      for (let i = 0; i < response.length; i++) {
-                        this.locations.push(response[i]) 
-                    }
                     },
                     (error: HttpErrorResponse) => {
                       alert(error.message);

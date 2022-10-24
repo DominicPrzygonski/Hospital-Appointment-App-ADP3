@@ -18,6 +18,10 @@ buildNumber.properties
 Angular/hospital-appointment-app/.angular/cache
 Angular/hospital-appointment-app/node_modules
 <<<<<<< HEAD
+<<<<<<< HEAD
 /node_modules/
 =======
 >>>>>>> d6b3e22db15c64ca945dd18c4be0d54415ef800c
+=======
+node_modules/
+>>>>>>> parent of d45d6119 (front)

@@ -44,26 +44,26 @@
         </div>
         <!-- hospital -->
         <div class = "col-lg-3 col-sm-6">
-            <div class = "card-box bg-red">
+            <div class = "card-box bg-orange">
                 <div class = "inner">
                     <h3> Hospital </h3>
                     <p> CRUD Operations </p>
                 </div>
                 <div class = "icon">
-                    <i class = "fa fa-hospital-o" aria-hidden = "true"> </i>
+                    <i class = "fa fa-user-plus" aria-hidden = "true"> </i>
                 </div>
                 <a (click) = "displayHospital()" class = "card-box-footer"> Enter <i class = "fa fa-arrow-circle-right"> </i> </a>
             </div>
         </div>
         <!-- location -->
         <div class = "col-lg-3 col-sm-6">
-            <div class = "card-box bg-yellow">
+            <div class = "card-box bg-orange">
                 <div class = "inner">
                     <h3> Location </h3>
                     <p> CRUD Operations </p>
                 </div>
                 <div class = "icon">
-                    <i class = "fa fa-location-arrow" aria-hidden = "true"> </i>
+                    <i class = "fa fa-user-plus" aria-hidden = "true"> </i>
                 </div>
                 <a (click) = "displayLocation()" class = "card-box-footer"> Enter <i class = "fa fa-arrow-circle-right"> </i> </a>
             </div>
@@ -290,6 +290,8 @@
     <!-- Hospital -->
     <div id="hospital" *ngIf="showHospital">
         <button class="btn btn-primary waves-effect waves-light btn-lg m-b-5" (click)="onOpenModalHospital('add', null!)">Create Hospital</button>
+        <button class="btn btn-primary waves-effect waves-light btn-lg m-b-5" (click)="onOpenModalHospital('edit', null!)">Edit Hospital</button>
+        <button class="btn btn-primary waves-effect waves-light btn-lg m-b-5" (click)="onOpenModalHospital('delete', null!)">Delete Hospital</button>
 
         <div class="container" id="hospital-Container">
             <div class="row">
@@ -379,15 +381,15 @@
                             </div>
                             <div class="form-group">
                                 <label for="hospitalName">Hospital Name</label>
-                                <input type="text" [ngModel]="editHospital?.hospitalName" name="hospitalName" class="form-control" id="hospitalName" placeholder="Hospital Name" required>
+                                <input type="text" ngModel name="hospitalName" class="form-control" id="hospitalName" placeholder="Hospital Name" required>
                             </div>
                             <div class="form-group">
                                 <label for="hospitalCapacity">Hospital Capacity</label>
-                                <input type="text" [ngModel]="editHospital?.hospitalCapacity" name="hospitalCapacity" class="form-control" id="hospitalCapacity" placeholder="Hospital Capacity" required>
+                                <input type="text" ngModel name="hospitalCapacity" class="form-control" id="hospitalCapacity" placeholder="Hospital Capacity" required>
                             </div>
                             <div class="form-group">
                                 <label for="hospitalSector">Hospital Sector</label>
-                                <input type="text" [ngModel]="editHospital?.hospitalSector" name="hospitalSector" class="form-control" id="hospitalSector" placeholder="Hospital Sector" required>
+                                <input type="text" ngModel name="hospitalSector" class="form-control" id="hospitalSector" placeholder="Hospital Sector" required>
                             </div>
 
                             <div class="modal-footer">
@@ -425,6 +427,8 @@
     <!-- Location -->
     <div id="location" *ngIf="showLocation">
         <button class="btn btn-primary waves-effect waves-light btn-lg m-b-5" (click)="onOpenModalLocation('add', null!)">Create Location</button>
+        <button class="btn btn-primary waves-effect waves-light btn-lg m-b-5" (click)="onOpenModalLocation('edit', null!)">Edit Location</button>
+        <button class="btn btn-primary waves-effect waves-light btn-lg m-b-5" (click)="onOpenModalLocation('delete', null!)">Delete Location</button>
 
         <div class="container" id="location-Container">
             <div class="row">
@@ -519,19 +523,19 @@
                             </div>
                             <div class="form-group">
                                 <label for="streetNum">Street Number</label>
-                                <input type="text" [ngModel]="editLocation?.streetNum" name="streetNum" class="form-control" id="streetNum" placeholder="Street Number" required>
+                                <input type="text" ngModel name="streetNum" class="form-control" id="streetNum" placeholder="Street Number" required>
                             </div>
                             <div class="form-group">
                                 <label for="streetName">Street Name</label>
-                                <input type="text" [ngModel]="editLocation?.streetName" name="streetName" class="form-control" id="streetName" placeholder="Street Name" required>
+                                <input type="text" ngModel name="streetName" class="form-control" id="streetName" placeholder="Street Name" required>
                             </div>
                             <div class="form-group">
                                 <label for="suburb">Suburb</label>
-                                <input type="text" [ngModel]="editLocation?.suburb" name="suburb" class="form-control" id="suburb" placeholder="Suburb" required>
+                                <input type="text" ngModel name="suburb" class="form-control" id="suburb" placeholder="Suburb" required>
                             </div>
                             <div class="form-group">
                                 <label for="postalCode">Postal Code</label>
-                                <input type="text" [ngModel]="editLocation?.postalCode" name="postalCode" class="form-control" id="postalCode" placeholder="Postal Code" required>
+                                <input type="text" ngModel name="postalCode" class="form-control" id="postalCode" placeholder="Postal Code" required>
                             </div>
 
                             <div class="modal-footer">
