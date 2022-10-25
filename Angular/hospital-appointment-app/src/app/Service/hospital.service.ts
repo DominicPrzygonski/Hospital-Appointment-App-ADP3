@@ -33,7 +33,7 @@ export class HospitalService {
     return this.http.post<Hospital>(`${this.apiServerUrl}/hospital/save`, hospital, httpOptions)
   }
 
-  public deleteHospital(hospitalId: string): Observable<void> {
+  public deleteHospital(hospitalId?: string): Observable<void> {
     return this.http.delete<void>(`${this.apiServerUrl}/hospital/delete/${hospitalId}`, httpOptions)
   }
 
